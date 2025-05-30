@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Heredar la vista formulario de Factura/Asiento Contable (account.move) -->
+    <record id="view_move_form_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Aquí defines tus modificaciones -->
+            <!-- Ejemplo 1: Añadir un campo personalizado -->
+           <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" name="action_view_source_sale_orders_from_invoice_origin" type="object" icon="fa-pencil-square-o" invisible="sale_order_count != 0 or move_type not in ('out_invoice', 'out_refund', 'in_invoice', 'in_refund', 'out_receipt', 'in_receipt') or new_order_count == 0 ">
+                    <field string="Órden de ventas" name="new_order_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_inherit_custom_invoices" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.custom.invoices</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Modificamos el button_box para añadir nuestro botón -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_custom_invoices" 
+                        type="object" 
+                        class="oe_stat_button" 
+                        icon="fa-pencil-square-o"
+                        invisible="invoice_count_new == 0 or invoice_count > 0">
+                    <field name="invoice_count_new" widget="statinfo" string="Facturas"/>
+                </button>
+            </xpath>
+            <xpath expr="//field[@name='validity_date']" position="after">
+                <field name="total_invoice_amount" invisible="1"/>
+                <field name="amount_total" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='534']" position="replace">
+                    <button id="create_invoice" name="534" string="Crear factura" type="action" class="btn-primary" data-hotkey="i" invisible="invoice_status != 'to invoice'"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>
