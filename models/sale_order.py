@@ -19,14 +19,23 @@ class AccountMove(models.Model):
             count = len(order.new_invoice_ids)
             order.invoice_count_new = count
                          
-    @api.depends('new_invoice_ids', 'new_invoice_ids.amount_total')
+    @api.depends('new_invoice_ids', 'new_invoice_ids.amount_total', 'new_invoice_ids.move_type', 'new_invoice_ids.state')
     def _compute_total_invoice_amount(self):
         for order in self:
+            total = 0.0
+            for invoice in order.new_invoice_ids.filtered(lambda inv: inv.state == 'posted'):
+                if invoice.move_type == 'out_invoice':
+                    total += invoice.amount_total
+                elif invoice.move_type == 'out_refund':  # Notas de crédito
+                    total -= invoice.amount_total
+            order.total_invoice_amount = total
+            """
             order.total_invoice_amount = sum(
                 invoice.amount_total 
                 for invoice in order.new_invoice_ids 
                 if invoice.state == 'posted'  # Solo facturas validadas
             )
+            """
 
     def action_view_custom_invoices(self):
         """Acción para ver las facturas personalizadas vinculadas a la orden"""
