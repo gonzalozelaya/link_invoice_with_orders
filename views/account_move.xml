@@ -31,10 +31,22 @@
                     <field name="invoice_count_new" widget="statinfo" string="Facturas"/>
                 </button>
             </xpath>
+            <xpath expr="//field[@name='validity_date']" position="before">
+                <field name="state" invisible="1"/>
+                <field name="suggested_subtotal" groups="link_invoice_with_orders.group_show_suggested_subtotal"  readonly="1" invisible="state not in ['sale']" class="oe_subtotal_highlight"/>
+                <!--
+                    <div class="oe_subtotal_highlight">
+                        <div class="d-flex justify-content-between">
+                            <field name="suggested_subtotal" string="Subtotal Sugerido" readonly="1" invisible="state not in ['sale']"/>
+                        </div>
+                    </div>
+                -->
+            </xpath>
             <xpath expr="//field[@name='validity_date']" position="after">
                 <field name="total_invoice_amount" invisible="1"/>
                 <field name="amount_total" invisible="1"/>
             </xpath>
+            
             <xpath expr="//button[@name='534']" position="replace">
                     <button id="create_invoice" name="534" string="Crear factura" type="action" class="btn-primary" data-hotkey="i" invisible="invoice_status != 'to invoice'"/>
             </xpath>

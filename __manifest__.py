@@ -20,8 +20,15 @@
     # any module necessary for this one to work correctly
     'depends': ['account','sale'],
     'data':[
+        'security/groups.xml',
         'views/account_move.xml',
     ],
+
+    'assets': {
+        'web.assets_backend': [
+            'link_invoice_with_orders/static/src/css/custom.css',
+        ],
+    },
     # only loaded in demonstration mode
     'installable':True,
     'application':False,

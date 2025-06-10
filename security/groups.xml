@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_show_suggested_subtotal" model="res.groups">
+        <field name="name">Mostrar Subtotal Sugerido</field>
+    </record>
+</odoo>
